@@ -7,8 +7,6 @@ import com.inventorsoft.junit.dto.response.BookResponse;
 import com.inventorsoft.junit.model.Author;
 import com.inventorsoft.junit.model.Book;
 import com.inventorsoft.junit.repository.AuthorRepository;
-import com.inventorsoft.junit.repository.BookRepository;
-import com.inventorsoft.junit.service.BookService;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
