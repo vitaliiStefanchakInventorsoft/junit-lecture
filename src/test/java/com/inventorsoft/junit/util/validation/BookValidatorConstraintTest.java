@@ -16,16 +16,22 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 class BookValidatorConstraintTest {
 
-    @Mock AuthorRepository authorRepository;
-    @Mock BookRepository bookRepository;
-    @InjectMocks BookValidatorConstraint validator;
+    @Mock
+    AuthorRepository authorRepository;
+
+    @Mock
+    BookRepository bookRepository;
+
+    @InjectMocks
+    BookValidatorConstraint validator;
 
     static final long AUTHOR_ID = 35L;
     static final String AUTHOR_NAME = "Leo Tolstoy";
@@ -33,13 +39,7 @@ class BookValidatorConstraintTest {
 
     static final String BOOK_TITLE = "War and Peace";
     static final LocalDate BOOK_RELEASE_DATE = LocalDate.of(1869, 5, 23);
-    static final String BOOK_DESCRIPTION = """
-             War and Peace broadly focuses on Napoleon’s invasion of Russia in 1812 and
-             follows three of the most well-known characters in literature: Pierre Bezukhov, the illegitimate
-             son of a count who is fighting for his inheritance and yearning for spiritual fulfillment;
-             Prince Andrei Bolkonsky, who leaves his family behind to fight in the war against Napoleon;
-             and Natasha Rostov, the beautiful young daughter of a nobleman who intrigues both men.
-            """;
+    static final String BOOK_DESCRIPTION = "Text";
 
     static CreateAuthorRequest authorRequest = new CreateAuthorRequest();
     static CreateBookRequest bookRequest = new CreateBookRequest();
@@ -59,13 +59,6 @@ class BookValidatorConstraintTest {
     static void clear() {
         authorRequest = null;
         bookRequest = null;
-    }
-
-    @Test
-    void isValidShouldReturnTrue() {
-        when(authorRepository.existsById(bookRequest.getAuthorId())).thenReturn(true);
-        boolean isValid = validator.isValid(bookRequest, null);
-        assertTrue(isValid);
     }
 
     @Test
@@ -101,14 +94,6 @@ class BookValidatorConstraintTest {
         bookRequest.setReleaseDate(LocalDate.of(2075, 5, 23));
         boolean isValid = validator.isValid(bookRequest, null);
         assertFalse(isValid);
-    }
-
-    @Test
-    void isValidShouldReturnTrueWhenReleaseDateIsOldThanNow() {
-        bookRequest.setReleaseDate(LocalDate.of(2005, 5, 23));
-        when(authorRepository.existsById(bookRequest.getAuthorId())).thenReturn(true);
-        boolean isValid = validator.isValid(bookRequest, null);
-        assertTrue(isValid);
     }
 
     @Test

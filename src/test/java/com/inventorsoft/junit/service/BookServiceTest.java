@@ -23,8 +23,13 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -32,10 +37,13 @@ class BookServiceTest {
 
     @Mock
     AuthorRepository authorRepository;
+
     @Mock
     BookRepository bookRepository;
+
     @Mock
     BookMapper bookMapper;
+
     @InjectMocks
     BookService bookService;
 
@@ -46,13 +54,7 @@ class BookServiceTest {
     static final long BOOK_ID = 5L;
     static final String BOOK_TITLE = "War and Peace";
     static final LocalDate BOOK_RELEASE_DATE = LocalDate.of(1869, 5, 23);
-    static final String BOOK_DESCRIPTION = """
-             War and Peace broadly focuses on Napoleon’s invasion of Russia in 1812 and 
-             follows three of the most well-known characters in literature: Pierre Bezukhov, the illegitimate 
-             son of a count who is fighting for his inheritance and yearning for spiritual fulfillment;
-             Prince Andrei Bolkonsky, who leaves his family behind to fight in the war against Napoleon; 
-             and Natasha Rostov, the beautiful young daughter of a nobleman who intrigues both men.
-            """;
+    static final String BOOK_DESCRIPTION = "Text";
 
     static AuthorResponse authorResponse = new AuthorResponse();
     static BookResponse bookResponse = new BookResponse();
@@ -212,7 +214,7 @@ class BookServiceTest {
     }
 
     @Test
-    void changeAuthorForBookWhenAllCorrect() {
+    void changeAuthorForBook() {
         Author newAuthor = new Author();
         Long newAuthorId = 100L;
         newAuthor.setId(newAuthorId);

@@ -8,15 +8,20 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -31,13 +36,7 @@ class BookRepositoryTest {
     static final long BOOK_ID = 5L;
     static final String BOOK_TITLE = "War and Peace";
     static final LocalDate BOOK_RELEASE_DATE = LocalDate.of(1869, 5, 23);
-    static final String BOOK_DESCRIPTION = """
-             War and Peace broadly focuses on Napoleon’s invasion of Russia in 1812 and 
-             follows three of the most well-known characters in literature: Pierre Bezukhov, the illegitimate 
-             son of a count who is fighting for his inheritance and yearning for spiritual fulfillment;
-             Prince Andrei Bolkonsky, who leaves his family behind to fight in the war against Napoleon; 
-             and Natasha Rostov, the beautiful young daughter of a nobleman who intrigues both men.
-            """;
+    static final String BOOK_DESCRIPTION = "Text";
 
     static Author author;
     static Book book;
@@ -128,7 +127,7 @@ class BookRepositoryTest {
     }
 
     @Test
-    void saveShouldWhenBookIdNull(){
+    void saveWhenBookIdNull(){
         int size = bookMap.size();
         book.setId(null);
         var result = bookRepository.save(book);

@@ -30,9 +30,14 @@ import static org.mockito.Mockito.when;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 class BookMapperTest {
 
-    @Mock AuthorRepository authorRepository;
-    @Mock AuthorMapper authorMapper;
-    @InjectMocks BookMapper bookMapper;
+    @Mock
+    AuthorRepository authorRepository;
+
+    @Mock
+    AuthorMapper authorMapper;
+
+    @InjectMocks
+    BookMapper bookMapper;
 
     static final long AUTHOR_ID = 35L;
     static final String AUTHOR_NAME = "Leo Tolstoy";
@@ -41,13 +46,7 @@ class BookMapperTest {
     static final long BOOK_ID = 5L;
     static final String BOOK_TITLE = "War and Peace";
     static final LocalDate BOOK_RELEASE_DATE = LocalDate.of(1869, 5, 23);
-    static final String BOOK_DESCRIPTION = """
-             War and Peace broadly focuses on Napoleon’s invasion of Russia in 1812 and 
-             follows three of the most well-known characters in literature: Pierre Bezukhov, the illegitimate 
-             son of a count who is fighting for his inheritance and yearning for spiritual fulfillment;
-             Prince Andrei Bolkonsky, who leaves his family behind to fight in the war against Napoleon; 
-             and Natasha Rostov, the beautiful young daughter of a nobleman who intrigues both men.
-            """;
+    static final String BOOK_DESCRIPTION = "Text";
 
     static Author author = new Author();
     static Book book = new Book();
@@ -140,15 +139,6 @@ class BookMapperTest {
         assertThrows(RuntimeException.class,
                 () -> authorRepository.findById(null)
                         .orElseThrow(RuntimeException::new));
-    }
-
-    @Test
-    public void mapCreateRequestToEntityShouldThrowNullPointExceptionWhenRequestIsNull() {
-        CreateBookRequest createBookRequest = null;
-        Exception exception = assertThrows(NullPointerException.class, () ->
-                bookMapper.mapCreateRequestToEntity(createBookRequest));
-        assertEquals("Cannot invoke \"com.inventorsoft.junit.dto.request.CreateBookRequest.getTitle()" +
-                "\" because \"request\" is null", exception.getMessage());
     }
 
     @Test
