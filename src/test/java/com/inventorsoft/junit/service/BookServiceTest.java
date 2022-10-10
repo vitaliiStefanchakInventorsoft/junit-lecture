@@ -15,7 +15,6 @@ import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,12 +23,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 
 @ExtendWith(MockitoExtension.class)
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -37,10 +34,13 @@ class BookServiceTest {
 
     @Mock
     AuthorRepository authorRepository;
+
     @Mock
     BookRepository bookRepository;
+
     @Mock
     BookMapper bookMapper;
+
     @InjectMocks
     BookService bookService;
 
@@ -98,8 +98,6 @@ class BookServiceTest {
         updateBook.setTitle(book.getTitle());
         updateBook.setReleaseDate(book.getReleaseDate());
         updateBook.setDescription(book.getDescription());
-
-
     }
 
     @Test
@@ -117,7 +115,7 @@ class BookServiceTest {
     }
 
     @Test
-    void ifIdUserIsNullAnExceptionShouldBeThrown() {
+    void getByIdShouldThrowRuntimeExceptionWhenIdUserNotFound() {
         assertThrows(RuntimeException.class, () -> bookService.getById(null));
     }
 
@@ -156,10 +154,8 @@ class BookServiceTest {
         // then
         assertEquals(ID, id);
         verify(bookRepository, times(1)).save(book);
-
     }
 
-    //todo:does it work correctly?
     @Test
     void update() {
         when(bookRepository.findById(ID)).thenReturn(Optional.of(book));
@@ -171,29 +167,32 @@ class BookServiceTest {
         assertEquals(updateBook.getTitle(), book.getTitle());
         assertEquals(updateBook.getReleaseDate(), book.getReleaseDate());
         assertEquals(updateBook.getDescription(), book.getDescription());
-
-
     }
 
     @Test
-    void anExceptionShouldBeThrownIfTheBookIdIsNotFound() {
+    void updateShouldThrowRuntimeExceptionWhenIdUserNotFound() {
+        when(bookRepository.findById(ID)).thenReturn(Optional.empty());
+        assertThrows(RuntimeException.class, () ->
+                bookService.update(ID, updateBookRequest));
+    }
+
+    @Test
+    void changeAuthorForBookShouldThrowRuntimeExceptionWhenBookIdIsNotFound() {
         when(bookRepository.findById(ID)).thenReturn(Optional.empty());
 
         assertThrows(RuntimeException.class, () -> bookService.changeAuthorForBook(ID, AUTHOR_ID));
     }
 
     @Test
-    void anExceptionShouldBeThrownIfTheAuthorIdIsNotFound() {
+    void changeAuthorForBookShouldThrowRuntimeExceptionWhenAuthorIdIsNotFound() {
         Long idForAuthor = 2L;
         when(bookRepository.findById(ID)).thenReturn(Optional.of(book));
         when(authorRepository.findById(idForAuthor)).thenReturn(Optional.empty());
         assertThrows(RuntimeException.class, () -> bookService.changeAuthorForBook(ID, idForAuthor));
-
     }
 
-    //todo: change?
     @Test
-    void changeAuthorForBookWhenAllIsCorrect() {
+    void changeAuthorForBook() {
         Long newAuthorId = 112L;
         Author newAuthor = new Author();
         newAuthor.setId(newAuthorId);
@@ -204,7 +203,6 @@ class BookServiceTest {
         verify(bookRepository, times(1)).findById(ID);
         verify(authorRepository, times(1)).findById(newAuthorId);
         verify(bookRepository, times(1)).save(book);
-
     }
 
     @Test

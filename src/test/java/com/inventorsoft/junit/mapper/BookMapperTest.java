@@ -41,8 +41,10 @@ class BookMapperTest {
 
     @Mock
     AuthorRepository authorRepository;
+
     @Mock
     AuthorMapper authorMapper;
+
     @InjectMocks
     BookMapper bookMapper;
 
@@ -97,7 +99,6 @@ class BookMapperTest {
         updateBook.setReleaseDate(LocalDate.of(2033, 2, 2));
         updateBook.setDescription("aa");
         updateBook.setAuthor(updateAuthor);
-
     }
 
     @Test
@@ -108,9 +109,7 @@ class BookMapperTest {
         when(authorMapper.mapEntityToResponse(book.getAuthor())).thenReturn(authorResponse);
 
         List<BookResponse> givenResults = bookMapper.mapEntitiesToResponses(books);
-        System.out.println(givenResults);
 
-        // then
         assertEquals(expectedResults.size(), givenResults.size());
         assertArrayEquals(expectedResults.toArray(), givenResults.toArray());
     }
@@ -134,7 +133,6 @@ class BookMapperTest {
         when(authorRepository.findById(AUTHOR_ID)).thenReturn(Optional.of(author));
         Book givenResult = bookMapper.mapCreateRequestToEntity(createBookRequest);
 
-
         assertEquals(book.getTitle(), givenResult.getTitle());
         assertEquals(book.getDescription(), givenResult.getDescription());
         assertEquals(book.getReleaseDate(), givenResult.getReleaseDate());
@@ -142,9 +140,10 @@ class BookMapperTest {
     }
 
     @Test
-    void ifIdAuthorIsNullAnExceptionShouldBeThrown() {
-        assertThrows(RuntimeException.class, () -> authorRepository.findById(null)
-                .orElseThrow(RuntimeException::new));
+    void mapCreateRequestToEntityShouldThrowRuntimeExceptionWhenAuthorIsNotFound() {
+        when(authorRepository.findById(AUTHOR_ID)).thenReturn(Optional.empty());
+
+        assertThrows(RuntimeException.class, () -> bookMapper.mapCreateRequestToEntity(createBookRequest));
     }
 
     @Test
@@ -158,6 +157,5 @@ class BookMapperTest {
         assertEquals(updateBook.getReleaseDate(), book.getReleaseDate());
         assertEquals(updateBook.getDescription(), book.getDescription());
         assertEquals(updateBook.getAuthor().getId(), book.getAuthor().getId());
-
     }
 }

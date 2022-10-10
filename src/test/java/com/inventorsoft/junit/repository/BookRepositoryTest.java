@@ -6,9 +6,9 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-
 class BookRepositoryTest {
-    private BookRepository bookRepository = new BookRepository();
+
+    private final BookRepository bookRepository = new BookRepository();
 
     @Test
     void save() {
@@ -18,7 +18,7 @@ class BookRepositoryTest {
     }
 
     @Test
-    void whenIdInset() {
+    void testSaveWhenIdIsPresent() {
         Book book = new Book();
         book.setId(1L);
         bookRepository.save(book);
