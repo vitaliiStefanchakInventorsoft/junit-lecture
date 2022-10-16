@@ -31,7 +31,7 @@ public class BookMapper {
   public BookResponse mapEntityToResponse(Book book) {
     BookResponse response = new BookResponse();
     response.setId(book.getId());
-    response.setTitle(book.getDescription());
+    response.setTitle(book.getTitle());
     response.setReleaseDate(book.getReleaseDate());
     response.setDescription(book.getDescription());
 
@@ -67,4 +67,5 @@ public class BookMapper {
 
     initAuthorToBook(book, updateRequest);
   }
+
 }
