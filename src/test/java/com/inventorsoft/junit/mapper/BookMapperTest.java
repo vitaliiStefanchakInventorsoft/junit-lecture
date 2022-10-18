@@ -81,8 +81,10 @@ public class BookMapperTest {
 
     @Test
     public void mapEntityToResponse() {
-        // when
+        //given
         when(authorMapper.mapEntityToResponse(book.getAuthor())).thenReturn(authorResponse);
+
+        // when
         BookResponse givenResult = bookMapper.mapEntityToResponse(book);
 
         // then
@@ -98,8 +100,9 @@ public class BookMapperTest {
         List<Book> books = List.of(book);
         List<BookResponse> expectedResults = List.of(bookResponse);
 
-        // when
         when(authorMapper.mapEntityToResponse(book.getAuthor())).thenReturn(authorResponse);
+
+        // when
         List<BookResponse> givenResults = bookMapper.mapEntitiesToResponses(books);
 
         // then
@@ -108,8 +111,10 @@ public class BookMapperTest {
 
     @Test
     public void mapCreateRequestToEntity() {
-        // when
+        //given
         when(authorRepository.findById(ID)).thenReturn(Optional.of(author));
+
+        // when
         Book givenResult = bookMapper.mapCreateRequestToEntity(createBookRequest);
 
         // then
@@ -149,8 +154,9 @@ public class BookMapperTest {
         updateBook.setReleaseDate(LocalDate.of(2020, 10, 10));
         updateBook.setAuthor(updateAuthor);
 
-        // when
         when(authorRepository.findById(updateBookRequest.getAuthorId())).thenReturn(Optional.of(author));
+
+        // when
         bookMapper.updateEntityFromUpdateRequest(book, updateBookRequest);
 
         // then
