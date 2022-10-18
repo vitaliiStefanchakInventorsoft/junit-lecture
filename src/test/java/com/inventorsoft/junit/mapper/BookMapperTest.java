@@ -73,7 +73,6 @@ public class BookMapperTest {
         bookResponse.setDescription(DESCRIPTION);
         bookResponse.setAuthor(authorResponse);
 
-
         createBookRequest.setTitle(TITLE);
         createBookRequest.setDescription(DESCRIPTION);
         createBookRequest.setReleaseDate(RELEASE_DATE);
